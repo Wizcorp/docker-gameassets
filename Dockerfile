@@ -34,7 +34,7 @@ RUN wget  https://github.com/GPUOpen-Tools/Compressonator/releases/download/v3.0
 ##
 # Main image
 ##
-FROM alpine:latest  
+FROM ubuntu:latest  
 
 # crunch
 COPY --from=0 /tmp/crunch/bin/crunch /usr/bin
@@ -66,13 +66,14 @@ COPY --from=0 /usr/local/bin/nv-gnome-thumbnailer /usr/bin
 COPY --from=0 /usr/local/bin/nvtestsuite /usr/bin
 COPY --from=0 /usr/local/bin/nvhdrtest /usr/bin
 
-RUN echo "@edgecommunity http://dl-3.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
-RUN apk update \
-    && apk add \
+RUN apt-get update \
+    && apt-get -y install \
+        bash-completion \
         imagemagick \
-        pngquant@edgecommunity \
-        lame
+        pngquant \
+        lame \
+    && apt-get clean
 
 RUN mkdir /assets
 WORKDIR /assets
-CMD "sh"
+CMD "bash"
